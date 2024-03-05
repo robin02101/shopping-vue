@@ -1,4 +1,7 @@
+
 <script >
+import {mapActions} from 'pinia';
+import {useCounterStore}from '@/stores/counter';
 export default {
 
   data() {
@@ -8,10 +11,19 @@ export default {
         buyArr:[],
     }
   },
+  computed:{
+
+
+},
   mounted(){
-               this.fetchData();
+        this.fetchData();
+      if(localStorage.getItem('buyArr')){
+      this.buyArr = JSON.parse(localStorage.getItem('buyArr'));
+
+    }
           },
   methods:{
+    ...mapActions(useCounterStore , ['addCount']),
     fetchData(){
       fetch('./MOCK_DATA.json')
         .then(response => response.json())
@@ -36,9 +48,28 @@ export default {
         localStorage.setItem('arr', JSON.stringify(this.arr));
       },
       buyCart(index){
+    //     if (index < 0 || index >= this.arr.length) {
+    //     console.error("Invalid index");
+    //     return;
+    // }
+
+
+    let existingItemIndex = this.buyArr.findIndex(item => item.id === this.arr[index].id);
+
+    if (existingItemIndex !== -1) {
       
-        this.buyArr.push(this.arr[index]);
+        this.buyArr[existingItemIndex].quantity += this.arr[index].quantity;
+    } else {
+          this.buyArr.push({
+            id: this.arr[index].id,
+            name:this.arr[index].name,
+            price:this.arr[index].price,
+            quantity: this.arr[index].quantity
+        });
+    }
+      this.addCount(this.buyArr.length);
             localStorage.setItem('buyArr', JSON.stringify(this.buyArr));
+            
       },
   },
 
