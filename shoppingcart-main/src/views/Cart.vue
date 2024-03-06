@@ -10,16 +10,25 @@ export default {
   data() {
     return{
         buyArr:[],
-        
+        checkArr: []
+
     }
   },
  mounted(){
       if(localStorage.getItem('buyArr')){
       this.buyArr = JSON.parse(localStorage.getItem('buyArr'));
-      
-    }
+          }
+    
    
     },
+    computed: {
+    totalQuantity() {
+      return this.checkArr.reduce((total, item) => total +  item.quantity, 0);
+    },
+    totalPrice(){
+      return this.checkArr.reduce((total, item) => total +  item.price * item.quantity, 0);
+    },
+  },
   methods:{
     addNumber(index){
         this.buyArr[index].quantity++;
@@ -31,9 +40,31 @@ export default {
       },
       saveBuy(){
         const checkedItems = this.buyArr.filter(item => item.check);
-        localStorage.setItem('buyArr', JSON.stringify(checkedItems));
+        localStorage.setItem('checkArr', JSON.stringify(checkedItems));
+       if (this.checkArr.length === 0){
+        alert('請選擇要購買的商品');
+       }
       },
+      backBtn(){
+        if (this.checkArr.length === 0){
+          this.$router.push('/Cart'); 
+       }else{
+        localStorage.setItem('checkArr', JSON.stringify(checkedItems));
+       }
+        
+      },
+      handleCheck(item) {
+      if (item.check) {
+        this.checkArr.push(item);
+      } else {
+        const index = this.checkArr.findIndex(i => i === item);
+        if (index !== -1) {
+          this.checkArr.splice(index, 1);
+        }
+      }
+    },
      
+    
   },
 };
 </script>
@@ -47,6 +78,7 @@ export default {
             
         <div class="grid-thead">
             <div class="grid-cols-6 grid border-y border-main-deep text-main-deep font-bold py-1 gap-x-3">
+           
                 <div class="gird-th text-center"></div>
                 <div class="gird-th text-center">商品圖片</div>
                 <div class="gird-th">商品名稱</div>
@@ -54,11 +86,11 @@ export default {
                 <div class="gird-th opacity-0">操作</div>
             </div>
         </div>
-            
-    <div class="grid-thead">
-        <div class="grid-cols-6 grid border-y border-main-deep text-main-deep font-bold py-1 gap-x-3" v-for="(item,index) in buyArr" :key="item.id">
+     
+    <div class="grid-thead"> 
+        <div class="grid-cols-6 grid border-y border-main-deep text-main-deep font-bold py-1 gap-x-3 " v-for="(item,index) in buyArr" :key="item.id">
         <div class="gird-th text-center flex justify-center ">
-            <input type="checkbox" class="w-5"  v-model="item.check">
+            <input type="checkbox" class="w-5"  v-model="item.check" @change="handleCheck(item)">
         </div>
         <img src="../assets/image/300x300_0.png" alt="">
         <div class="gird-th flex items-center">{{ item.name }}</div>
@@ -71,13 +103,22 @@ export default {
             </div>
         </div>  
     </div>
-    <div class="flex justify-end flex-wrap" v-for="(item,index) in buyArr" :key="item.id">
-        <h2 class="text-2xl text-end font-bold w-full">商品數量: {{ item.quantity }}</h2>
-        <h2 class="text-2xl text-end font-bold w-full">商品總金額:${{ item.price * item.quantity}}</h2>
+    <div class="flex justify-end flex-wrap">
+        <h2 class="text-2xl text-end font-bold w-full flex justify-end ">商品數量: 
+          <div >
+            {{  totalQuantity }}
+          </div>
+        </h2>
+        <h2 class="text-2xl text-end font-bold w-full flex justify-end ">商品總金額:$ 
+          <div > 
+            {{ totalPrice }}
+          </div>
+        </h2>
+       
     </div>
-    <div class="flex justify-between gap-4">
-        <RouterLink to="/Shopping"><allBtn content="回上一頁繼續購買" bg-color="bg-[#8c5046]" /></RouterLink>
-            <RouterLink to="/Checkbuy"><allBtn content="確認購買" bg-color="bg-[#50468c]" @click="saveBuy()"/></RouterLink>
+    <div class="flex justify-between gap-4 mt-20">
+        <RouterLink to="/" ><allBtn content="回上一頁繼續購買" bg-color="bg-[#8c5046]" /></RouterLink>
+            <RouterLink to="/Checkbuy" @click="backBtn()"><allBtn content="確認購買" bg-color="bg-[#50468c]" @click="saveBuy()"/></RouterLink>
     </div>
 </div>
     </div>

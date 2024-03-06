@@ -10,7 +10,7 @@ export default {
   },
   data() {
    return{
-    buyArr:[],
+   
     idArr:[],
     nameValue:'',
     phoneValue:'',
@@ -21,9 +21,7 @@ export default {
    }
   },
   mounted(){
-      if(localStorage.getItem('buyArr')){
-      this.buyArr = JSON.parse(localStorage.getItem('buyArr'));
-    }
+     
     },
 
   methods:{

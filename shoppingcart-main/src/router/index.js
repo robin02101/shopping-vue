@@ -8,7 +8,7 @@ const router = createRouter({
   
    
     {
-      path: '/Shopping',
+      path: '/',
       name: 'Shopping',
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route

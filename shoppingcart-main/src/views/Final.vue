@@ -5,11 +5,12 @@ export default {
     return {
     idArr:[],
     buyArr:[],
+    checkArr:[],
     }
   },
   mounted(){
-      if(localStorage.getItem('buyArr')){
-      this.buyArr = JSON.parse(localStorage.getItem('buyArr'));
+      if(localStorage.getItem('checkArr')){
+      this.checkArr = JSON.parse(localStorage.getItem('checkArr'));
     }
     if(localStorage.getItem('idArr')){
       this.idArr = JSON.parse(localStorage.getItem('idArr'));
@@ -18,7 +19,7 @@ export default {
   methods:{
     remove(){
       localStorage.removeItem('idArr');
-
+      localStorage.removeItem('checkArr');
       localStorage.removeItem('buyArr');
     },
   },
@@ -42,7 +43,7 @@ export default {
             </div>
           </div>
           <div class="grid-tbody">
-            <div class="grid-tr grid-cols-4 grid py-1 border-b border-main-deep min-h-[80px] gap-x-3" v-for="(item,index) in buyArr" :key="item.id">
+            <div class="grid-tr grid-cols-4 grid py-1 border-b border-main-deep min-h-[80px] gap-x-3" v-for="(item,index) in checkArr" :key="item.id">
               <div class="flex justify-center">
                 <img src="../assets/image/300x300_0.png" alt="商品圖示" class="w-[100px] h-full ">
               </div>
@@ -79,7 +80,7 @@ export default {
             </div>
         </div>
       </div>
-      <RouterLink to="/Shopping" @click="remove()"><div class="flex justify-center items-center bg-[#50468c] text-white rounded-md px-4 py-1 cursor-pointer">
+      <RouterLink to="/" @click="remove()"><div class="flex justify-center items-center bg-[#50468c] text-white rounded-md px-4 py-1 cursor-pointer">
         <span> 回首頁 </span>
       </div></RouterLink>
     </div>

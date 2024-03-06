@@ -28,7 +28,7 @@ export default{
       <nav class="flex gap-5 p-5 text-xl justify-between">
         <!-- <RouterLink to="/">Home</RouterLink> -->
         <!-- <RouterLink to="/CityApi">CityApi</RouterLink> -->
-        <RouterLink to="/Shopping">首頁</RouterLink>
+        <RouterLink to="/">首頁</RouterLink>
         <RouterLink to="/Checkbuy"></RouterLink>
         <RouterLink to="/Final"></RouterLink>
         
